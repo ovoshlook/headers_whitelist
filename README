@@ -1,0 +1,550 @@
+Headers Whitelist Module
+
+Iurii Gorlichenko
+
+   <iurii@uricomms.tech>
+
+Edited by
+
+Iurii Gorlichenko
+
+   <iurii@uricomms.tech>
+
+   Copyright © 2026 uricomms
+     __________________________________________________________________
+
+   Table of Contents
+
+   1. Admin Guide
+
+        1. Overview
+        2. Dependencies
+
+              2.1. Kamailio Modules
+              2.2. External Libraries or Applications
+
+        3. Parameters
+
+              3.1. keep_described_rfc3261 (int)
+              3.2. keep_path_rfc3327 (int)
+              3.3. keep_diversion_rfc5806 (int)
+              3.4. keep_rpid (int)
+              3.5. keep_refer_to_rfc3515 (int)
+              3.6. keep_sipifmatch_rfc3903 (int)
+              3.7. keep_session_expires_rfc4028 (int)
+              3.8. keep_min_se_rfc4028 (int)
+              3.9. keep_accept_contact_rfc3841 (int)
+              3.10. keep_allow_events_rfc3265 (int)
+              3.11. keep_referred_by_rfc3892 (int)
+              3.12. keep_reject_contact_rfc3841 (int)
+              3.13. keep_request_disposition_rfc3841 (int)
+              3.14. keep_identity_rfc4474 (int)
+              3.15. keep_identity_info_rfc4474 (int)
+              3.16. keep_ppi_rfc3325 (int)
+              3.17. keep_pai_rfc3325 (int)
+              3.18. keep_privacy_rfc3323 (int)
+              3.19. keep_reason_rfc3326 (int)
+              3.20. keep_header (string)
+              3.21. keep_header_case_sensitive (int)
+              3.22. params_json_file (string)
+
+        4. Functions
+
+              4.1. whitelist_headers()
+              4.2. whitelist_headers_with_profile(profile)
+
+        5. RPC Commands
+
+              5.1. hwl.reload
+              5.2. hwl.profiles_list
+
+        6. Examples
+        7. Event Routes
+
+   List of Examples
+
+   1.1. Set keep_described_rfc3261 parameter
+   1.2. Set keep_path_rfc3327 parameter
+   1.3. Set keep_diversion_rfc5806 parameter
+   1.4. Set keep_rpid parameter
+   1.5. Set keep_refer_to_rfc3515 parameter
+   1.6. Set keep_sipifmatch_rfc3903 parameter
+   1.7. Set keep_session_expires_rfc4028 parameter
+   1.8. Set keep_min_se_rfc4028 parameter
+   1.9. Set keep_accept_contact_rfc3841 parameter
+   1.10. Set keep_allow_events_rfc3265 parameter
+   1.11. Set keep_referred_by_rfc3892 parameter
+   1.12. Set keep_reject_contact_rfc3841 parameter
+   1.13. Set keep_request_disposition_rfc3841 parameter
+   1.14. Set keep_identity_rfc4474 parameter
+   1.15. Set keep_identity_info_rfc4474 parameter
+   1.16. Set keep_ppi_rfc3325 parameter
+   1.17. Set keep_pai_rfc3325 parameter
+   1.18. Set keep_privacy_rfc3323 parameter
+   1.19. Set keep_reason_rfc3326 parameter
+   1.20. Set keep_header parameter
+   1.21. Set keep_header_case_sensitive parameter
+   1.22. Set params_json_file parameter
+   1.23. JSON profiles file structure
+   1.24. whitelist_headers usage
+   1.25. whitelist_headers_with_profile usage
+
+Chapter 1. Admin Guide
+
+   Table of Contents
+
+   1. Overview
+   2. Dependencies
+
+        2.1. Kamailio Modules
+        2.2. External Libraries or Applications
+
+   3. Parameters
+
+        3.1. keep_described_rfc3261 (int)
+        3.2. keep_path_rfc3327 (int)
+        3.3. keep_diversion_rfc5806 (int)
+        3.4. keep_rpid (int)
+        3.5. keep_refer_to_rfc3515 (int)
+        3.6. keep_sipifmatch_rfc3903 (int)
+        3.7. keep_session_expires_rfc4028 (int)
+        3.8. keep_min_se_rfc4028 (int)
+        3.9. keep_accept_contact_rfc3841 (int)
+        3.10. keep_allow_events_rfc3265 (int)
+        3.11. keep_referred_by_rfc3892 (int)
+        3.12. keep_reject_contact_rfc3841 (int)
+        3.13. keep_request_disposition_rfc3841 (int)
+        3.14. keep_identity_rfc4474 (int)
+        3.15. keep_identity_info_rfc4474 (int)
+        3.16. keep_ppi_rfc3325 (int)
+        3.17. keep_pai_rfc3325 (int)
+        3.18. keep_privacy_rfc3323 (int)
+        3.19. keep_reason_rfc3326 (int)
+        3.20. keep_header (string)
+        3.21. keep_header_case_sensitive (int)
+        3.22. params_json_file (string)
+
+   4. Functions
+
+        4.1. whitelist_headers()
+        4.2. whitelist_headers_with_profile(profile)
+
+   5. RPC Commands
+
+        5.1. hwl.reload
+        5.2. hwl.profiles_list
+
+   6. Examples
+   7. Event Routes
+
+1. Overview
+
+   This module removes SIP headers from incoming messages unless they are
+   part of the module whitelist.
+
+   Headers required by RFC 3261 (Via, To, From, CSeq, Call-ID) are always
+   kept. Additional groups of headers can be enabled or disabled through
+   module parameters.
+
+   Custom header names can be whitelisted with the keep_header parameter.
+
+2. Dependencies
+
+   2.1. Kamailio Modules
+   2.2. External Libraries or Applications
+
+2.1. Kamailio Modules
+
+   The following modules must be loaded before this module:
+     * None.
+
+2.2. External Libraries or Applications
+
+   The following libraries or applications must be installed before
+   running Kamailio with this module loaded:
+     * None.
+
+3. Parameters
+
+   3.1. keep_described_rfc3261 (int)
+   3.2. keep_path_rfc3327 (int)
+   3.3. keep_diversion_rfc5806 (int)
+   3.4. keep_rpid (int)
+   3.5. keep_refer_to_rfc3515 (int)
+   3.6. keep_sipifmatch_rfc3903 (int)
+   3.7. keep_session_expires_rfc4028 (int)
+   3.8. keep_min_se_rfc4028 (int)
+   3.9. keep_accept_contact_rfc3841 (int)
+   3.10. keep_allow_events_rfc3265 (int)
+   3.11. keep_referred_by_rfc3892 (int)
+   3.12. keep_reject_contact_rfc3841 (int)
+   3.13. keep_request_disposition_rfc3841 (int)
+   3.14. keep_identity_rfc4474 (int)
+   3.15. keep_identity_info_rfc4474 (int)
+   3.16. keep_ppi_rfc3325 (int)
+   3.17. keep_pai_rfc3325 (int)
+   3.18. keep_privacy_rfc3323 (int)
+   3.19. keep_reason_rfc3326 (int)
+   3.20. keep_header (string)
+   3.21. keep_header_case_sensitive (int)
+   3.22. params_json_file (string)
+
+3.1. keep_described_rfc3261 (int)
+
+   Enable or disable keeping of headers described (but not required) by
+   RFC 3261, for example Contact, Max-Forwards, Route, Record-Route,
+   Content-*, Authorization and related headers.
+
+   If this parameter is set to 0, specific headers can still be kept with
+   keep_header.
+
+   Default value is 1 (enabled).
+
+   Example 1.1. Set keep_described_rfc3261 parameter
+...
+modparam("headers_whitelist", "keep_described_rfc3261", 1)
+...
+
+3.2. keep_path_rfc3327 (int)
+
+   Enable or disable keeping of Path header (RFC 3327).
+
+   Default value is 1 (enabled).
+
+   Example 1.2. Set keep_path_rfc3327 parameter
+...
+modparam("headers_whitelist", "keep_path_rfc3327", 1)
+...
+
+3.3. keep_diversion_rfc5806 (int)
+
+   Enable or disable keeping of Diversion header (RFC 5806).
+
+   Default value is 1 (enabled).
+
+   Example 1.3. Set keep_diversion_rfc5806 parameter
+...
+modparam("headers_whitelist", "keep_diversion_rfc5806", 1)
+...
+
+3.4. keep_rpid (int)
+
+   Enable or disable keeping of Remote-Party-ID header.
+
+   Default value is 1 (enabled).
+
+   Example 1.4. Set keep_rpid parameter
+...
+modparam("headers_whitelist", "keep_rpid", 1)
+...
+
+3.5. keep_refer_to_rfc3515 (int)
+
+   Enable or disable keeping of Refer-To header (RFC 3515).
+
+   Default value is 1 (enabled).
+
+   Example 1.5. Set keep_refer_to_rfc3515 parameter
+...
+modparam("headers_whitelist", "keep_refer_to_rfc3515", 1)
+...
+
+3.6. keep_sipifmatch_rfc3903 (int)
+
+   Enable or disable keeping of SIP-If-Match header (RFC 3903).
+
+   Default value is 1 (enabled).
+
+   Example 1.6. Set keep_sipifmatch_rfc3903 parameter
+...
+modparam("headers_whitelist", "keep_sipifmatch_rfc3903", 1)
+...
+
+3.7. keep_session_expires_rfc4028 (int)
+
+   Enable or disable keeping of Session-Expires header (RFC 4028).
+
+   Default value is 1 (enabled).
+
+   Example 1.7. Set keep_session_expires_rfc4028 parameter
+...
+modparam("headers_whitelist", "keep_session_expires_rfc4028", 1)
+...
+
+3.8. keep_min_se_rfc4028 (int)
+
+   Enable or disable keeping of Min-SE header (RFC 4028).
+
+   Default value is 1 (enabled).
+
+   Example 1.8. Set keep_min_se_rfc4028 parameter
+...
+modparam("headers_whitelist", "keep_min_se_rfc4028", 1)
+...
+
+3.9. keep_accept_contact_rfc3841 (int)
+
+   Enable or disable keeping of Accept-Contact header (RFC 3841).
+
+   Default value is 1 (enabled).
+
+   Example 1.9. Set keep_accept_contact_rfc3841 parameter
+...
+modparam("headers_whitelist", "keep_accept_contact_rfc3841", 1)
+...
+
+3.10. keep_allow_events_rfc3265 (int)
+
+   Enable or disable keeping of Allow-Events header (RFC 3265).
+
+   Default value is 1 (enabled).
+
+   Example 1.10. Set keep_allow_events_rfc3265 parameter
+...
+modparam("headers_whitelist", "keep_allow_events_rfc3265", 1)
+...
+
+3.11. keep_referred_by_rfc3892 (int)
+
+   Enable or disable keeping of Referred-By header (RFC 3892).
+
+   Default value is 1 (enabled).
+
+   Example 1.11. Set keep_referred_by_rfc3892 parameter
+...
+modparam("headers_whitelist", "keep_referred_by_rfc3892", 1)
+...
+
+3.12. keep_reject_contact_rfc3841 (int)
+
+   Enable or disable keeping of Reject-Contact header (RFC 3841).
+
+   Default value is 1 (enabled).
+
+   Example 1.12. Set keep_reject_contact_rfc3841 parameter
+...
+modparam("headers_whitelist", "keep_reject_contact_rfc3841", 1)
+...
+
+3.13. keep_request_disposition_rfc3841 (int)
+
+   Enable or disable keeping of Request-Disposition header (RFC 3841).
+
+   Default value is 1 (enabled).
+
+   Example 1.13. Set keep_request_disposition_rfc3841 parameter
+...
+modparam("headers_whitelist", "keep_request_disposition_rfc3841", 1)
+...
+
+3.14. keep_identity_rfc4474 (int)
+
+   Enable or disable keeping of Identity header (RFC 4474).
+
+   Default value is 1 (enabled).
+
+   Example 1.14. Set keep_identity_rfc4474 parameter
+...
+modparam("headers_whitelist", "keep_identity_rfc4474", 1)
+...
+
+3.15. keep_identity_info_rfc4474 (int)
+
+   Enable or disable keeping of Identity-Info header (RFC 4474).
+
+   Default value is 1 (enabled).
+
+   Example 1.15. Set keep_identity_info_rfc4474 parameter
+...
+modparam("headers_whitelist", "keep_identity_info_rfc4474", 1)
+...
+
+3.16. keep_ppi_rfc3325 (int)
+
+   Enable or disable keeping of P-Preferred-Identity header (RFC 3325).
+
+   Default value is 1 (enabled).
+
+   Example 1.16. Set keep_ppi_rfc3325 parameter
+...
+modparam("headers_whitelist", "keep_ppi_rfc3325", 1)
+...
+
+3.17. keep_pai_rfc3325 (int)
+
+   Enable or disable keeping of P-Asserted-Identity header (RFC 3325).
+
+   Default value is 1 (enabled).
+
+   Example 1.17. Set keep_pai_rfc3325 parameter
+...
+modparam("headers_whitelist", "keep_pai_rfc3325", 1)
+...
+
+3.18. keep_privacy_rfc3323 (int)
+
+   Enable or disable keeping of Privacy header (RFC 3323).
+
+   Default value is 1 (enabled).
+
+   Example 1.18. Set keep_privacy_rfc3323 parameter
+...
+modparam("headers_whitelist", "keep_privacy_rfc3323", 1)
+...
+
+3.19. keep_reason_rfc3326 (int)
+
+   Enable or disable keeping of Reason header (RFC 3326).
+
+   Default value is 1 (enabled).
+
+   Example 1.19. Set keep_reason_rfc3326 parameter
+...
+modparam("headers_whitelist", "keep_reason_rfc3326", 1)
+...
+
+3.20. keep_header (string)
+
+   Additional header names to keep. The value is parsed as a
+   semicolon-separated list of names (for example, “X-Foo;X-Bar”).
+
+   This parameter can be set multiple times; values are accumulated.
+
+   Default value is empty.
+
+   Example 1.20. Set keep_header parameter
+...
+modparam("headers_whitelist", "keep_header", "X-Foo;X-Bar")
+modparam("headers_whitelist", "keep_header", "Contact")
+...
+
+3.21. keep_header_case_sensitive (int)
+
+   Controls case sensitivity when matching header names from keep_header
+   against SIP headers.
+
+   Value “1” enables case-sensitive matching; value “0” enables
+   case-insensitive matching.
+
+   When JSON profiles are used, this value is applied per profile from
+   each profile object.
+
+   Default value is 1 (case-sensitive).
+
+   Example 1.21. Set keep_header_case_sensitive parameter
+...
+modparam("headers_whitelist", "keep_header_case_sensitive", 0)
+...
+
+3.22. params_json_file (string)
+
+   Path to a JSON file containing an array of profile objects. Each object
+   must define profile_name.
+
+   Unnamed profile objects are skipped and a warning is logged:
+   “profile[id] without name will be skipped due to unnamed”.
+
+   If this parameter is not set, an internal default profile named
+   “default” is created from module parameters.
+
+   If this parameter is set and script function whitelist_headers() is
+   used (without explicit profile), the first profile from the loaded
+   array (index 0) is used.
+
+   Example 1.22. Set params_json_file parameter
+...
+modparam("headers_whitelist", "params_json_file",
+    "/etc/kamailio/headers_whitelist_profiles.json")
+...
+
+   Example 1.23. JSON profiles file structure
+...
+[
+    {
+        "profile_name": "edge_inbound",
+        "keep_header_case_sensitive": 0,
+        "keep_header": [
+            "X-Trace-ID",
+            "X-Request-ID",
+            "P-Charging-Vector"
+        ]
+    },
+    {
+        "profile_name": "trunk_minimal",
+        "keep_described_rfc3261": 0,
+        "keep_path_rfc3327": 0,
+        "keep_diversion_rfc5806": 0,
+        "keep_rpid": 0,
+        "keep_reason_rfc3326": 0,
+        "keep_header_case_sensitive": 1,
+        "keep_header": [
+            "X-Custom-Trunk"
+        ]
+    }
+]
+...
+
+4. Functions
+
+   4.1. whitelist_headers()
+   4.2. whitelist_headers_with_profile(profile)
+
+4.1.  whitelist_headers()
+
+   Removes all SIP headers except the ones allowed by RFC 3261 and enabled
+   by module parameters.
+
+   The function marks headers for deletion using lumps. In normal
+   request/reply routing, changes are applied automatically.
+
+   To force immediate effect during configuration processing, call
+   msg_apply_changes() afterwards.
+
+   It can be used in REQUEST_ROUTE, ONREPLY_ROUTE, FAILURE_ROUTE, and
+   BRANCH_ROUTE.
+
+   When JSON profiles are enabled via params_json_file, this function logs
+   a warning and applies the first profile from loaded profile array
+   (index 0).
+
+   Example 1.24. whitelist_headers usage
+...
+whitelist_headers();
+...
+
+4.2.  whitelist_headers_with_profile(profile)
+
+   Same behavior as whitelist_headers(), but uses a specific whitelist
+   profile by name.
+
+   The profile must exist in loaded profiles (from JSON or default
+   profile).
+
+   Example 1.25. whitelist_headers_with_profile usage
+...
+whitelist_headers_with_profile("default");
+...
+
+5. RPC Commands
+
+   5.1. hwl.reload
+   5.2. hwl.profiles_list
+
+5.1. hwl.reload
+
+   Reload module profiles and parameters from current module
+   configuration.
+
+5.2. hwl.profiles_list
+
+   List loaded profiles. Returned fields include profile_name, profile_id,
+   all keep_* profile flags, and keep_header array.
+
+6. Examples
+
+   See files: doc/examples/headers_whitelist_example.cfg and
+   doc/examples/headers_whitelist_profiles.json.
+
+7. Event Routes
+
+   This module does not export event routes.

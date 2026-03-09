@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+
+<!-- Include general documentation entities -->
+<!ENTITY % docentities SYSTEM "../../../../doc/docbook/entities.xml">
+%docentities;
+
+]>
+<!-- Module User's Guide -->
+
+<chapter>
+
+    <title>&adminguide;</title>
+
+    <section>
+        <title>Overview</title>
+        <para>
+            This module removes SIP headers from incoming messages unless they are
+            part of the module whitelist.
+        </para>
+        <para>
+            Headers required by RFC 3261 (Via, To, From, CSeq, Call-ID) are always
+            kept. Additional groups of headers can be enabled or disabled through
+            module parameters.
+        </para>
+        <para>
+            Custom header names can be whitelisted with the
+            <varname>keep_header</varname> parameter.
+        </para>
+    </section>
+
+    <section>
+        <title>Dependencies</title>
+        <section>
+            <title>&kamailio; Modules</title>
+            <para>
+                The following modules must be loaded before this module:
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis>None</emphasis>.</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section>
+            <title>External Libraries or Applications</title>
+            <para>
+                The following libraries or applications must be installed before
+                running &kamailio; with this module loaded:
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis>None</emphasis>.</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    </section>
+
+    <section>
+        <title>Parameters</title>
+
+        <section id="headers_whitelist.p.keep_described_rfc3261">
+            <title><varname>keep_described_rfc3261</varname> (int)</title>
+            <para>
+                Enable or disable keeping of headers described (but not required)
+                by RFC 3261, for example Contact, Max-Forwards, Route,
+                Record-Route, Content-*, Authorization and related headers.
+            </para>
+            <para>
+                If this parameter is set to 0, specific headers can still be kept
+                with <varname>keep_header</varname>.
+            </para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_described_rfc3261</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_described_rfc3261", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_path_rfc3327">
+            <title><varname>keep_path_rfc3327</varname> (int)</title>
+            <para>Enable or disable keeping of Path header (RFC 3327).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_path_rfc3327</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_path_rfc3327", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_diversion_rfc5806">
+            <title><varname>keep_diversion_rfc5806</varname> (int)</title>
+            <para>Enable or disable keeping of Diversion header (RFC 5806).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_diversion_rfc5806</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_diversion_rfc5806", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_rpid">
+            <title><varname>keep_rpid</varname> (int)</title>
+            <para>Enable or disable keeping of Remote-Party-ID header.</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_rpid</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_rpid", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_refer_to_rfc3515">
+            <title><varname>keep_refer_to_rfc3515</varname> (int)</title>
+            <para>Enable or disable keeping of Refer-To header (RFC 3515).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_refer_to_rfc3515</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_refer_to_rfc3515", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_sipifmatch_rfc3903">
+            <title><varname>keep_sipifmatch_rfc3903</varname> (int)</title>
+            <para>Enable or disable keeping of SIP-If-Match header (RFC 3903).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_sipifmatch_rfc3903</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_sipifmatch_rfc3903", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_session_expires_rfc4028">
+            <title><varname>keep_session_expires_rfc4028</varname> (int)</title>
+            <para>Enable or disable keeping of Session-Expires header (RFC 4028).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_session_expires_rfc4028</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_session_expires_rfc4028", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_min_se_rfc4028">
+            <title><varname>keep_min_se_rfc4028</varname> (int)</title>
+            <para>Enable or disable keeping of Min-SE header (RFC 4028).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_min_se_rfc4028</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_min_se_rfc4028", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_accept_contact_rfc3841">
+            <title><varname>keep_accept_contact_rfc3841</varname> (int)</title>
+            <para>Enable or disable keeping of Accept-Contact header (RFC 3841).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_accept_contact_rfc3841</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_accept_contact_rfc3841", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_allow_events_rfc3265">
+            <title><varname>keep_allow_events_rfc3265</varname> (int)</title>
+            <para>Enable or disable keeping of Allow-Events header (RFC 3265).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_allow_events_rfc3265</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_allow_events_rfc3265", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_referred_by_rfc3892">
+            <title><varname>keep_referred_by_rfc3892</varname> (int)</title>
+            <para>Enable or disable keeping of Referred-By header (RFC 3892).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_referred_by_rfc3892</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_referred_by_rfc3892", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_reject_contact_rfc3841">
+            <title><varname>keep_reject_contact_rfc3841</varname> (int)</title>
+            <para>Enable or disable keeping of Reject-Contact header (RFC 3841).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_reject_contact_rfc3841</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_reject_contact_rfc3841", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_request_disposition_rfc3841">
+            <title><varname>keep_request_disposition_rfc3841</varname> (int)</title>
+            <para>Enable or disable keeping of Request-Disposition header (RFC 3841).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_request_disposition_rfc3841</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_request_disposition_rfc3841", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_identity_rfc4474">
+            <title><varname>keep_identity_rfc4474</varname> (int)</title>
+            <para>Enable or disable keeping of Identity header (RFC 4474).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_identity_rfc4474</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_identity_rfc4474", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_identity_info_rfc4474">
+            <title><varname>keep_identity_info_rfc4474</varname> (int)</title>
+            <para>Enable or disable keeping of Identity-Info header (RFC 4474).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_identity_info_rfc4474</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_identity_info_rfc4474", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_ppi_rfc3325">
+            <title><varname>keep_ppi_rfc3325</varname> (int)</title>
+            <para>Enable or disable keeping of P-Preferred-Identity header (RFC 3325).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_ppi_rfc3325</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_ppi_rfc3325", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_pai_rfc3325">
+            <title><varname>keep_pai_rfc3325</varname> (int)</title>
+            <para>Enable or disable keeping of P-Asserted-Identity header (RFC 3325).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_pai_rfc3325</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_pai_rfc3325", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_privacy_rfc3323">
+            <title><varname>keep_privacy_rfc3323</varname> (int)</title>
+            <para>Enable or disable keeping of Privacy header (RFC 3323).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_privacy_rfc3323</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_privacy_rfc3323", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_reason_rfc3326">
+            <title><varname>keep_reason_rfc3326</varname> (int)</title>
+            <para>Enable or disable keeping of Reason header (RFC 3326).</para>
+            <para><emphasis>Default value is 1 (enabled).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_reason_rfc3326</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_reason_rfc3326", 1)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_header">
+            <title><varname>keep_header</varname> (string)</title>
+            <para>
+                Additional header names to keep. The value is parsed as a
+                semicolon-separated list of names (for example,
+                <quote>X-Foo;X-Bar</quote>).
+            </para>
+            <para>
+                This parameter can be set multiple times; values are accumulated.
+            </para>
+            <para><emphasis>Default value is empty.</emphasis></para>
+            <example>
+                <title>Set <varname>keep_header</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_header", "X-Foo;X-Bar")
+modparam("headers_whitelist", "keep_header", "Contact")
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.keep_header_case_sensitive">
+            <title><varname>keep_header_case_sensitive</varname> (int)</title>
+            <para>
+                Controls case sensitivity when matching header names from
+                <varname>keep_header</varname> against SIP headers.
+            </para>
+            <para>
+                Value <quote>1</quote> enables case-sensitive matching;
+                value <quote>0</quote> enables case-insensitive matching.
+            </para>
+            <para>
+                When JSON profiles are used, this value is applied per profile
+                from each profile object.
+            </para>
+            <para><emphasis>Default value is 1 (case-sensitive).</emphasis></para>
+            <example>
+                <title>Set <varname>keep_header_case_sensitive</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "keep_header_case_sensitive", 0)
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.p.params_json_file">
+            <title><varname>params_json_file</varname> (string)</title>
+            <para>
+                Path to a JSON file containing an array of profile objects.
+                Each object must define <varname>profile_name</varname>.
+            </para>
+            <para>
+                Unnamed profile objects are skipped and a warning is logged:
+                <quote>profile[id] without name will be skipped due to unnamed</quote>.
+            </para>
+            <para>
+                If this parameter is not set, an internal default profile
+                named <quote>default</quote> is created from module parameters.
+            </para>
+            <para>
+                If this parameter is set and script function
+                <function moreinfo="none">whitelist_headers()</function> is
+                used (without explicit profile), the first profile from the
+                loaded array (index 0) is used.
+            </para>
+            <example>
+                <title>Set <varname>params_json_file</varname> parameter</title>
+                <programlisting format="linespecific">
+...
+modparam("headers_whitelist", "params_json_file",
+    "/etc/kamailio/headers_whitelist_profiles.json")
+...
+</programlisting>
+            </example>
+            <example>
+                <title>JSON profiles file structure</title>
+                <programlisting format="linespecific"><![CDATA[
+...
+[
+    {
+        "profile_name": "edge_inbound",
+        "keep_header_case_sensitive": 0,
+        "keep_header": [
+            "X-Trace-ID",
+            "X-Request-ID",
+            "P-Charging-Vector"
+        ]
+    },
+    {
+        "profile_name": "trunk_minimal",
+        "keep_described_rfc3261": 0,
+        "keep_path_rfc3327": 0,
+        "keep_diversion_rfc5806": 0,
+        "keep_rpid": 0,
+        "keep_reason_rfc3326": 0,
+        "keep_header_case_sensitive": 1,
+        "keep_header": [
+            "X-Custom-Trunk"
+        ]
+    }
+]
+...
+]]></programlisting>
+            </example>
+        </section>
+    </section>
+
+    <section>
+        <title>Functions</title>
+        <section id="headers_whitelist.f.whitelist_headers">
+            <title>
+                <function moreinfo="none">whitelist_headers()</function>
+            </title>
+            <para>
+                Removes all SIP headers except the ones allowed by RFC 3261 and
+                enabled by module parameters.
+            </para>
+            <para>
+                The function marks headers for deletion using lumps. In normal
+                request/reply routing, changes are applied automatically.
+            </para>
+            <para>
+                To force immediate effect during configuration processing,
+                call <function moreinfo="none">msg_apply_changes()</function>
+                afterwards.
+            </para>
+            <para>
+                It can be used in REQUEST_ROUTE, ONREPLY_ROUTE,
+                FAILURE_ROUTE, and BRANCH_ROUTE.
+            </para>
+            <para>
+                When JSON profiles are enabled via
+                <varname>params_json_file</varname>, this function logs a
+                warning and applies the first profile from loaded profile
+                array (index 0).
+            </para>
+            <example>
+                <title><function>whitelist_headers</function> usage</title>
+                <programlisting format="linespecific">
+...
+whitelist_headers();
+...
+</programlisting>
+            </example>
+        </section>
+
+        <section id="headers_whitelist.f.whitelist_headers_with_profile">
+            <title>
+                <function moreinfo="none">whitelist_headers_with_profile(profile)</function>
+            </title>
+            <para>
+                Same behavior as
+                <function moreinfo="none">whitelist_headers()</function>,
+                but uses a specific whitelist profile by name.
+            </para>
+            <para>
+                The profile must exist in loaded profiles (from JSON or default profile).
+            </para>
+            <example>
+                <title><function>whitelist_headers_with_profile</function> usage</title>
+                <programlisting format="linespecific">
+...
+whitelist_headers_with_profile("default");
+...
+</programlisting>
+            </example>
+        </section>
+    </section>
+
+    <section>
+        <title>RPC Commands</title>
+        <section id="headers_whitelist.rpc.reload">
+            <title><function moreinfo="none">hwl.reload</function></title>
+            <para>
+                Reload module profiles and parameters from current module configuration.
+            </para>
+        </section>
+        <section id="headers_whitelist.rpc.profiles_list">
+            <title><function moreinfo="none">hwl.profiles_list</function></title>
+            <para>
+                List loaded profiles. Returned fields include
+                <varname>profile_name</varname>, <varname>profile_id</varname>,
+                all keep_* profile flags, and keep_header array.
+            </para>
+        </section>
+    </section>
+
+    <section>
+        <title>Examples</title>
+        <para>
+            See files:
+            <filename>doc/examples/headers_whitelist_example.cfg</filename> and
+            <filename>doc/examples/headers_whitelist_profiles.json</filename>.
+        </para>
+    </section>
+
+    <section>
+        <title>Event Routes</title>
+        <para>
+            This module does not export event routes.
+        </para>
+    </section>
+
+</chapter>
