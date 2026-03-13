@@ -527,9 +527,30 @@ whitelist_headers_with_profile("default");
 
 6. Examples
 
-   See files: doc/examples/headers_whitelist_example.cfg and
-   doc/examples/headers_whitelist_profiles.json.
-
+...
+[
+    {
+        "profile_name": "edge_inbound",
+        "keep_header_case_sensitive": 0,
+        "keep_header": [
+            "X-Trace-ID",
+            "X-Request-ID",
+            "P-Charging-Vector"
+        ]
+    },
+    {
+        "profile_name": "trunk_minimal",
+        "keep_described_rfc3261": 0,
+        "keep_path_rfc3327": 0,
+        "keep_diversion_rfc5806": 0,
+        "keep_rpid": 0,
+        "keep_reason_rfc3326": 0,
+        "keep_header_case_sensitive": 1,
+        "keep_header": [
+            "X-Custom-Trunk"
+        ]
+    }
+]
 7. Event Routes
 
    This module does not export event routes.
